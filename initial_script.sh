@@ -6,10 +6,10 @@
 set -e 
 
 # checking for successful ethernet connection
-x = $(ip -4 addr show scope global | grep eth | grep inet | awk '{print $2}') | cut -d/ -f1
+x=$(ip -4 addr show scope global | grep eth | grep inet | awk '{print $2}') | cut -d/ -f1
 if [ -z "$x" ]
 then
-  echo "No Ethernet Connected, qutting"
+  echo "No Ethernet Connected, quitting"
   exit 1
 
 else
