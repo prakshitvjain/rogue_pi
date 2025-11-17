@@ -13,7 +13,7 @@ then
   exit 1
 
 else
-  # we configure the kali ARM to require no password or configure user kali to act as root without password
+  # we configure the kali ARM to require no password on boot for root user, check tty1-autologin-shell-setup.sh 
   sudo su
   if [ "$(id -u)" -ne 0 ]; then
     echo "Error migrating to root"
