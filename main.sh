@@ -32,3 +32,11 @@ for OS in LIN WIN; do
     grep -f "$INPUT_FILE" service_scan*.gnmap | grep -E "${PORT}/open/tcp" | awk '{print $2}' | sort -u > ${OS}_PORT${PORT}.txt
   done
 done
+
+# LLMNR Poisoning
+responder -I eth0 > responder.txt &
+
+# SMB Enum 
+for IP in $(WIN_PORT445.txt); do
+  smbclient -L "$IP" -N > smb-${IP}.txt
+done
